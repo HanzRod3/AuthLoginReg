@@ -27,6 +27,15 @@ app.use(express.json());
 // Use user routes with "/api/user" as the base URL
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode,
+  });
+});
 
 // Start server on port 8004
 app.listen(8004, () => {
