@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
-
+import bcryptjs from "bcryptjs";
 // Sign up logic
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   try {
     const { username, email, password } = req.body; //  Extract username, email, and password from request body
     const hashedPassword = bcryptjs.hashSync(password, 10); // Hash the password
@@ -10,5 +10,6 @@ export const signup = async (req, res) => {
     res.status(201).json({ message: "User registered successfully" }); // Send a success message
   } catch (error) {
     res.status(400).json({ message: "Error registering user", error }); // Send an error message
+    next(error(400, "Error registering user"));
   }
 };
